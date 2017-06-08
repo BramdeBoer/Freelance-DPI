@@ -10,6 +10,19 @@ public class MessageReceiverGateway {
 	private Destination destination;
 	private MessageConsumer consumer;
 
+	public MessageReceiverGateway() {
+		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+		try {
+			connection = connectionFactory.createConnection();
+			connection.start();
+
+			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		}
+		catch (JMSException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public MessageReceiverGateway(String queue) {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
 		try {
@@ -18,10 +31,27 @@ public class MessageReceiverGateway {
 
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			destination = session.createQueue(queue);
-
 			consumer = this.session.createConsumer(destination);
 		}
 		catch (JMSException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void createTopic(String topic) {
+		try {
+			destination = session.createTopic(topic);
+			consumer = this.session.createConsumer(destination);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void createQueue(String queue) {
+		try {
+			destination = session.createQueue(queue);
+			consumer = this.session.createConsumer(destination);
+		} catch (JMSException e) {
 			e.printStackTrace();
 		}
 	}

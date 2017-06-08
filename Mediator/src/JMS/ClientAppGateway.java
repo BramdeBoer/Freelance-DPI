@@ -17,7 +17,7 @@ public abstract class ClientAppGateway {
 
 		receiver.setListener(new MessageListener() {
 			public void onMessage(Message message) {
-				System.out.println("@ClientAppGateway Received message");
+				System.out.println("Mediator from employer @ClientAppGateway Received message");
 				onEmployerRequest((TextMessage)message);
 			}
 		});
